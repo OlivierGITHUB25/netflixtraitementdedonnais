@@ -1,12 +1,14 @@
 import pandas as pd
 import statistics
-readCSV = pd.read_csv('FusionCorrigee.csv', index_col=False)
+
 moyenneF=0
 total=0
 movieCounter = 0
 counter = 0
 liste=[]
 med =0
+
+readCSV = pd.read_csv('FusionCorrigee.csv', index_col=False)
 
 while True:
     try:
@@ -21,11 +23,12 @@ while True:
             if cellCheck == False:
                 movie = readCSV.iloc[counter, 9]
                 movie = int(movie[:-3])
-                total+= movie
+                total += movie
                 liste.append(movie)
 
     counter += 1
-moyenneF=total/movieCounter
-med=statistics.median(liste)
 
-print(f"Il y a {movieCounter} pour une durée de  {total} min nous avons donc une moyenne  de {moyenneF:.2f} min par film et une mediane de {med}")
+mean = total/movieCounter
+median = statistics.median(liste)
+
+print(f"Il y a {movieCounter} pour une durée de  {total} min nous avons donc une moyenne  de {mean:.2f} min par film et une mediane de {median}")
