@@ -31,4 +31,4 @@ while True:
 mean = total/movieCounter
 median = statistics.median(liste)
 
-print(f"Il y a {movieCounter} pour une durée de  {total} min nous avons donc une moyenne  de {mean:.2f} min par film et une mediane de {median}")
+print(f"Il y a {movieCounter} pour une durée de  {total} min nous avons donc une moyenne de {mean:.2f} min par film et une mediane de {median}")

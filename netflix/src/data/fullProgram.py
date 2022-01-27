@@ -6,17 +6,13 @@ def merge():
     for i in range(1, 6):
         read = pd.read_csv(f"../../data/raw/netflix-{i}.csv", header=None)
         read = read.drop(read.columns[11], axis=1)
-        os.chdir("../../output")
-        read.to_csv(f"output{i}.csv", index=False)
+        read.to_csv(f"../../output/output{i}.csv", index=False)
 
     df = pd.concat(
-        map(pd.read_csv, ['output1.csv', 'output2.csv', 'output3.csv', 'output4.csv', 'output5.csv']),
+        map(pd.read_csv, ['../../output/output1.csv', '../../output/output2.csv','../../output/output3.csv','../../output/output4.csv','../../output/output5.csv']),
         ignore_index=True)
 
-    df.to_csv("merge.csv", index=False)
-
-    for i in range(1, 6):
-        os.remove(f"output{i}.csv")
+    df.to_csv("../../output/merge.csv", index=False)
 
 def getNumberOfRows(file):
     read = pd.read_csv(file, index_col=False)
@@ -56,7 +52,7 @@ def valueCheck(file, nbLines):
                 missingValue += 1
 
     read.drop(read.index[delList], inplace=True)
-    read.to_csv('finalMerge.csv', index=False)
+    read.to_csv('../../output/finalMerge.csv', index=False)
 
     return aberrantValue, missingValue, missingValueColumn
 
@@ -115,7 +111,7 @@ def ComputeMean(file):
 def ComputeMedian(timeList):
     median = med(timeList)
     return (median)
-merge()
+
 try:
     merge()
 except PermissionError:
@@ -123,9 +119,8 @@ except PermissionError:
 except:
     print("La fusion a échouée")
 else:
-    os.chdir("../../output")
-    mergeFile = "merge.csv"
-    finalMergeFile = "finalMerge.csv"
+    mergeFile = "../../output/merge.csv"
+    finalMergeFile = "../../output/finalMerge.csv"
 
     numberOfRows = getNumberOfRows(mergeFile)
     aberrantValue, missingValue, missingValueColumn = valueCheck(mergeFile, numberOfRows)
@@ -139,7 +134,7 @@ else:
     median = ComputeMedian(timelist)
     total = aberrantValue + missingValueColumn
 
-    os.remove("merge.csv")
+    os.remove("../../output/merge.csv")
 
     print(f"--------------------------------\n"
           f"NOMBRE VALEURS MANQUANTES TOTALES : {missingValue}\n"

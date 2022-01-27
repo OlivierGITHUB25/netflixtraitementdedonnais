@@ -14,7 +14,6 @@ from pandas import DataFrame
 for i in range (1,6):
     lecture= pds.read_csv(f"../../data/raw/netflix-{i}.csv", header=None)
     test = lecture.drop(lecture.columns[11], axis=1)
-    os.chdir("../../output")
 df = pd.concat(
-    map(pd.read_csv, ['output1.csv', 'output2.csv','output3.csv','output4.csv','output5.csv' ]), ignore_index=True)
-df.to_csv("merge.csv", index=False)
+    map(pd.read_csv, ['../../output/output1.csv', '../../output/output2.csv','../../output/output3.csv','../../output/output4.csv','../../output/output5.csv']), ignore_index=True)
+df.to_csv("../../output/merge.csv", index=False)

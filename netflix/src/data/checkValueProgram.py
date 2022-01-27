@@ -7,9 +7,7 @@ vaManquanteCol = 0
 delList = []
 counter = 0
 
-os.chdir("../../output")
-
-read = pd.read_csv('merge.csv', index_col=False)
+read = pd.read_csv('../../output/merge.csv', index_col=False)
 
 while True:
     counter += 1
@@ -34,11 +32,11 @@ while True:
             vaManquante += 1
 
 read.drop(read.index[delList], inplace=True)
-read.to_csv('finalMerge.csv', index=False)
+read.to_csv('../../output/finalMerge.csv', index=False)
 
 total = vaAberante + vaManquanteCol
 
-os.remove("merge.csv")
+os.remove("../../output/merge.csv")
 calc = lambda x : x * 100 / counter
 
 print(f"--------------------------------\n"
