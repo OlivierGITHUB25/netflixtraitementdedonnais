@@ -5,27 +5,31 @@ vaManquante = 0
 vaAberante = 0
 vaManquanteCol = 0
 delList = []
+counter = 0
 
-for i in range(1, 8808):
+while True:
+    counter += 1
     try:
-        added = read.iloc[i, 6]
-        released = int(read.iloc[i, 7])
+        added = read.iloc[counter, 6]
+        released = int(read.iloc[counter, 7])
         nothing, added = added.split(",")
         added = int(added)
+    except IndexError:
+        break
     except:
-        delList.append(i)
+        delList.append(counter)
         vaManquante += 1
         vaManquanteCol += 1
     if added < released:
         vaAberante += 1
-        print(added, released, f"--> Valeur Abérante Ligne s{i}")
-        delList.append(i)
+        print(added, released, f"--> Valeur Abérante Ligne s{counter}")
+        delList.append(counter)
     for n in range(0, 11):
-        cellCheck = pd.isnull(read.iloc[i, n])
+        cellCheck = pd.isnull(read.iloc[counter, n])
         if cellCheck == True:
             vaManquante += 1
 
-calc = lambda x : x * 100 / 8808
+calc = lambda x : x * 100 / counter
 read.drop(read.index[delList], inplace=True)
 read.to_csv('FusionCorrigee.csv', index=False)
 total = vaAberante + vaManquanteCol
@@ -44,3 +48,4 @@ print(f"--------------------------------\n"
       f"Pourcentage d'erreur total : {calc(total):.2f}\n"
       f"--------------------------------\n"
       f"SEUL LES COLONNES 6 ET 7 ONT ÉTÉ CORRIGÉ DANS LE FICHIER FINAL")
+
