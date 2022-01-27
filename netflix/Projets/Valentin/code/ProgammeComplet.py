@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-
+from statistics import median as med
 
 def merge():
     for i in range(1, 6):
@@ -17,7 +17,6 @@ def merge():
     for i in range(1, 6):
         os.remove(f"output{i}.csv")
 
-
 def getNumberOfRows(file):
     read = pd.read_csv(file, index_col=False)
     counter = 0
@@ -27,17 +26,15 @@ def getNumberOfRows(file):
             read.iloc[counter, 0]
         except IndexError:
             break
-        except:
-            continue
     return counter
 
-
 def valueCheck(file, nbLines):
-    read = pd.read_csv(file, index_col=False)
     missingValue = 0
     aberrantValue = 0
     missingValueColumn = 0
     delList = []
+
+    read = pd.read_csv(file, index_col=False)
 
     for counter in range(1, nbLines):
         try:
@@ -51,7 +48,6 @@ def valueCheck(file, nbLines):
             missingValueColumn += 1
         if released > added:
             aberrantValue += 1
-            print(added, released, f"--> Valeur Abérante Ligne s{counter}")
             delList.append(counter)
         for n in range(0, 11):
             cellCheck = pd.isnull(read.iloc[counter, n])
@@ -63,12 +59,12 @@ def valueCheck(file, nbLines):
 
     return aberrantValue, missingValue, missingValueColumn
 
-
 def frenchMovies(file):
-    readCSV = pd.read_csv(file, index_col=False)
     counter = 0
     movieCounter = 0
     frenchMovies = 0
+
+    readCSV = pd.read_csv(file, index_col=False)
 
     while True:
         try:
@@ -88,6 +84,37 @@ def frenchMovies(file):
         counter += 1
     return frenchMovies, movieCounter
 
+def ComputeMean(file):
+    movieCounter = 0
+    counter = 0
+    timeList = []
+    total = 0
+
+    readCSV = pd.read_csv(file, index_col=False)
+
+    while True:
+        try:
+            cellCheck = pd.isnull(readCSV.iloc[counter, 1])
+        except IndexError:
+            break
+        if cellCheck == False:
+            movie = readCSV.iloc[counter, 1]
+            if movie == "Movie":
+                cellCheck = pd.isnull(readCSV.iloc[counter, 9])
+                movieCounter += 1
+                if cellCheck == False:
+                    movie = readCSV.iloc[counter, 9]
+                    movie = int(movie[:-3])
+                    total += movie
+                    timeList.append(movie)
+        counter += 1
+    mean = total / movieCounter
+    return mean, timeList
+
+def ComputeMedian(timeList):
+    median = med(timeList)
+    return (median)
+
 try:
     merge()
 except PermissionError:
@@ -97,13 +124,21 @@ except:
 else:
     mergeFile = "Merge.csv"
     finalMergeFile = "FinalMerge.csv"
+
     numberOfRows = getNumberOfRows(mergeFile)
     aberrantValue, missingValue, missingValueColumn = valueCheck(mergeFile, numberOfRows)
+
     numberOfRows = getNumberOfRows(finalMergeFile)
-    calc = lambda x : x * 100 / numberOfRows
-    total = aberrantValue + missingValueColumn
+    calc = lambda x: x * 100 / numberOfRows
+
     frenchMovies, movieCounter = frenchMovies(finalMergeFile)
+
+    mean, timelist = ComputeMean(finalMergeFile)
+    median = ComputeMedian(timelist)
+    total = aberrantValue + missingValueColumn
+
     os.remove("Merge.csv")
+
     print(f"--------------------------------\n"
           f"NOMBRE VALEURS MANQUANTES TOTALES : {missingValue}\n"
           f"Pourcentage : {calc(missingValue):.2f}\n"
@@ -119,5 +154,7 @@ else:
           f"--------------------------------\n"
           f"SEUL LES COLONNES 6 ET 7 ONT ÉTÉ CORRIGÉ DANS LE FICHIER FINAL\n"
           f"--------------------------------\n"
-          f"{frenchMovies}/{movieCounter} films ont été produits en France\n")
+          f"{frenchMovies}/{movieCounter} films ont été produits en France\n"
+          f"Durée moyenne des films : {mean:.2f} minutes\n"
+          f"Median Films : {median} minutes\n")
 

@@ -1,11 +1,13 @@
 import pandas as pd
+import os
 
-read = pd.read_csv('fusion.csv', index_col=False)
 vaManquante = 0
 vaAberante = 0
 vaManquanteCol = 0
 delList = []
 counter = 0
+
+read = pd.read_csv('Merge.csv', index_col=False)
 
 while True:
     counter += 1
@@ -29,10 +31,13 @@ while True:
         if cellCheck == True:
             vaManquante += 1
 
-calc = lambda x : x * 100 / counter
 read.drop(read.index[delList], inplace=True)
-read.to_csv('FusionCorrigee.csv', index=False)
+read.to_csv('FinalMerge.csv', index=False)
+
 total = vaAberante + vaManquanteCol
+
+os.remove("Merge.csv")
+calc = lambda x : x * 100 / counter
 
 print(f"--------------------------------\n"
       f"NOMBRE VALEURS MANQUANTES TOTALES : {vaManquante}\n"

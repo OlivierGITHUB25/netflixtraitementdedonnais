@@ -1,9 +1,10 @@
 import pandas as pd
 
-readCSV = pd.read_csv('FusionCorrigee.csv', index_col=False)
 counter = 0
 movieCounter = 0
 frenchMovies = 0
+
+readCSV = pd.read_csv('FinalMerge.csv', index_col=False)
 
 while True:
     try:
