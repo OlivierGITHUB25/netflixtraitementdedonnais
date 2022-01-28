@@ -108,6 +108,7 @@ def ComputeMean(file):
     mean = total / movieCounter
     return mean, timeList
 
+
 def ComputeMedian(timeList):
     median = med(timeList)
     return (median)
