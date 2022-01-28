@@ -1,13 +1,14 @@
 import pandas as pd
+from pandas import DataFrame
 import matplotlib.pyplot as plt
 import re
-import csv
+#import csv
 
 #readCSV = pd.read_csv('../../output/finalMerge.csv', index_col=False)
-with open('../../output/finalMerge.csv','r') as file:
-    reader = list(csv.reader(file))
-    for i in range(len(reader)):
-        print(reader[i])
+#with open('../../output/finalMerge.csv','r') as file:
+    #reader = list(csv.reader(file))
+    #for i in range(len(reader)):
+        #print(reader[i])
 
 counter = 0
 ligne=0
@@ -41,3 +42,85 @@ while True:
 total=total/conteur
 listeSaison.append(total)
 print(f"{listeSaison},{total},{conteur}")'''
+
+#listeTV.sort()
+#listeSaison.sort()
+#plt.figure(figsize=(30,30))
+#plt.plot(listeSaison, listeTV )
+#plt.title('figure 1')
+#plt.xlabel('axe x')
+#plt.ylabel('axe y')
+#plt.savefig('fig.png')
+#plt.show()
+
+readCSV = pd.read_csv('../../output/finalMerge.csv', index_col=False)
+TVCounter = 0
+counter = 0
+listeTV=[]
+listeSaison=[]
+
+while True:
+    try:
+        cellCheck = pd.isnull(readCSV.iloc[counter, 1])
+    except IndexError:
+        break
+    if cellCheck == False:
+        series = readCSV.iloc[counter, 1]
+        if series == "TV Show":
+            cellCheck = pd.isnull(readCSV.iloc[counter, 7])
+            TVCounter += 1
+            if cellCheck == False:
+                TV = readCSV.iloc[counter, 7]
+                listeTV.append(TV)
+
+    counter += 1
+
+print(f"Voici la liste des annès des series {listeTV}")
+
+counter = 0
+cellCheck = 0
+series = 0
+tv =0
+
+while True:
+    try:
+        cellCheck = pd.isnull(readCSV.iloc[counter, 1])
+    except IndexError:
+        break
+    if cellCheck == False:
+        series = readCSV.iloc[counter, 1]
+        if series == "TV Show":
+            cellCheck = pd.isnull(readCSV.iloc[counter, 9])
+            TVCounter += 1
+            if cellCheck == False:
+                TV = readCSV.iloc[counter, 9]
+                number, bin = TV.split(" ")
+                listeSaison.append(number)
+
+    counter += 1
+print(f"Voici la liste des annès des series {listeSaison}")
+dict = {'sasison': listeSaison, 'TV': listeTV,}
+df = pd.DataFrame(dict)
+df.to_csv('test.csv', header=None)
+
+
+readCSV2 = pd.read_csv('test.csv', index_col=False)
+for i in range(1900, 2050):
+    while True:
+        try:
+            cellCheck = pd.isnull(readCSV2.iloc[counter, 9])
+        except IndexError:
+            break
+        if cellCheck == False:
+            series = readCSV2.iloc[counter, 9]
+            print("test2")
+            if series == str(i):
+                print("test3")
+                conteur += 1
+                TV = readCSV2.iloc[counter, 9]
+                total += int(re.findall('\d+', f'{TV}')[0])
+        counter += 1
+
+total=total/conteur
+listeSaison.append(total)
+print(f"{listeSaison},{total},{conteur}")
