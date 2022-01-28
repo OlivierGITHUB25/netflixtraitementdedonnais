@@ -101,23 +101,26 @@ while True:
 print(f"Voici la liste des annès des series {listeSaison}")
 dict = {'sasison': listeSaison, 'TV': listeTV,}
 df = pd.DataFrame(dict)
-df.to_csv('test.csv', header=None)
+df.to_csv('test.csv')
 
 
-readCSV2 = pd.read_csv('test.csv', index_col=False)
+readCSV2 = pd.read_csv('test.csv')
+print("test0")
 for i in range(1900, 2050):
+    print("test1.5")
     while True:
         try:
-            cellCheck = pd.isnull(readCSV2.iloc[counter, 9])
+            print("test1")
+            cellCheck = pd.isnull(readCSV2.iloc[counter, 2])
         except IndexError:
             break
         if cellCheck == False:
-            series = readCSV2.iloc[counter, 9]
+            series = readCSV2.iloc[counter, 2]
             print("test2")
             if series == str(i):
                 print("test3")
                 conteur += 1
-                TV = readCSV2.iloc[counter, 9]
+                TV = readCSV2.iloc[counter, 2]
                 total += int(re.findall('\d+', f'{TV}')[0])
         counter += 1
 
